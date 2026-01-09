@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>root@aahil-portfolio:~</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
+
+        :root {
+            --term-green: #00ff41;
+            --term-bg: #0a0a0a;
+            --term-accent: #008f11;
+        }
+
+        body {
+            background-color: var(--term-bg);
+            color: var(--term-green);
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+        }
+
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 10;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 255, 65, 0.05) 50%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0.1;
+            position: fixed;
+            bottom: 100%;
+            animation: scanline 6s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scanline {
+            0% { bottom: 100%; }
+            100% { bottom: -100px; }
+        }
+
+        .crt-overlay::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 20;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .content-card {
+            background: rgba(0, 20, 0, 0.8);
+            border: 1px solid var(--term-accent);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+        }
+
+        .btn-terminal {
+            border: 1px solid var(--term-green);
+            transition: all 0.3s ease;
+        }
+
+        .btn-terminal:hover {
+            background: var(--term-green);
+            color: var(--term-bg);
+            box-shadow: 0 0 20px var(--term-green);
+        }
+
+        .ai-loading {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--term-accent); }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="scanline"></div>
+    <div class="crt-overlay"></div>
+    
+    <div id="boot-screen" class="fixed inset-0 z-50 bg-black flex flex-col p-6 text-sm overflow-hidden">
+        <div id="boot-log" class="space-y-1"></div>
+    </div>
+
+    <div class="max-w-5xl mx-auto">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
+            <div>
+                <h1 class="text-3xl font-bold uppercase tracking-tighter">Sheikh Mohammed Aahil <span class="text-xs align-top bg-green-900 px-1">v2.5.5</span></h1>
+                <p class="text-xs opacity-70">SYSTEM_ARCH: CS_AIML_STUDENT // ROLE: FOUNDER_WORK19 // FOCUS: AI_AUTOMATION</p>
+            </div>
+            <div class="flex flex-col items-end gap-1">
+                <div class="flex gap-4 text-xl">
+                    <a href="https://github.com/aahilsheikhofficial" target="_blank" title="GitHub Profile" class="hover:scale-125 transition-transform text-green-400 hover:text-white"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/aahilsheikhofficial" target="_blank" title="LinkedIn Profile" class="hover:scale-125 transition-transform text-green-400 hover:text-white"><i class="fab fa-linkedin"></i></a>
+                    <a href="mailto:aahilsheikhofficial@gmail.com" title="Direct Email" class="hover:scale-125 transition-transform text-green-400 hover:text-white"><i class="fas fa-envelope"></i></a>
+                </div>
+                <span class="text-[10px] text-green-300 opacity-40 font-bold uppercase tracking-widest mr-1">Connect on</span>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <aside class="space-y-6">
+                <nav class="content-card p-4 rounded space-y-2">
+                    <p class="text-[10px] opacity-50 mb-4 tracking-widest uppercase font-bold">Navigation</p>
+                    <button onclick="scrollToSection('about')" class="w-full text-left py-1 px-2 hover:bg-green-900/30 block">01. ./whoami</button>
+                    <button onclick="scrollToSection('skills')" class="w-full text-left py-1 px-2 hover:bg-green-900/30 block">02. ./capabilities</button>
+                    <button onclick="scrollToSection('experience')" class="w-full text-left py-1 px-2 hover:bg-green-900/30 block">03. ./experience</button>
+                    <button onclick="scrollToSection('work19-connect')" class="w-full text-left py-1 px-2 hover:bg-green-900/30 block">04. ./work19_social</button>
+                    <button onclick="scrollToSection('projects')" class="w-full text-left py-1 px-2 hover:bg-green-900/30 block">05. ./projects</button>
+                    <button onclick="scrollToSection('contact')" class="w-full text-left py-1 px-2 hover:bg-green-900/30 block">06. ./connect</button>
+                </nav>
+            </aside>
+
+            <main class="lg:col-span-2 space-y-16">
+                <section id="about" class="space-y-4">
+                    <h3 class="text-xl font-bold flex items-center gap-2">
+                        <span class="text-white">></span> WHOAMI
+                    </h3>
+                    <div class="text-sm leading-relaxed opacity-90">
+                        <p class="mb-4">I’m Sheikh Mohammed Aahil, a Computer Science (AIML) student currently building <strong>Work19</strong>, a tech initiative focused on developing AI-powered automation systems for clinics and small businesses. I’m exploring how AI + automation can reduce operational workload and improve workflows in real-world environments.</p>
+                        <p>I enjoy working on applied AI systems, automation tools, and simple voice/WhatsApp interfaces that solve practical business problems.</p>
+                    </div>
+                </section>
+
+                <section id="skills" class="space-y-6">
+                    <h3 class="text-xl font-bold flex items-center gap-2">
+                        <span class="text-white">></span> CORE_CAPABILITIES
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="border border-green-900 p-3">
+                            <p class="text-xs font-bold text-white mb-2 underline uppercase">Technical Foundations</p>
+                            <ul class="text-xs space-y-1">
+                                <li>- C language</li>
+                                <li>- AI & Automation Fundamentals</li>
+                                <li>- Workflow Automation</li>
+                            </ul>
+                        </div>
+                        <div class="border border-green-900 p-3">
+                            <p class="text-xs font-bold text-white mb-2 underline uppercase">Tools & Platforms</p>
+                            <div class="grid grid-cols-2 gap-x-2">
+                                <ul class="text-xs space-y-1">
+                                    <li>- Make</li>
+                                    <li>- Retell AI</li>
+                                    <li>- Zapier</li>
+                                    <li>- Framer</li>
+                                </ul>
+                                <ul class="text-xs space-y-1">
+                                    <li>- Google Sheets</li>
+                                    <li>- Google Forms</li>
+                                    <li>- Google Calendar</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="border border-green-900 p-3 md:col-span-2">
+                            <p class="text-xs font-bold text-white mb-2 underline uppercase">Soft Skills</p>
+                            <div class="flex flex-wrap gap-4 text-xs">
+                                <span>- Problem Solving</span>
+                                <span>- Client Communication</span>
+                                <span>- Leadership</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="experience" class="space-y-8">
+                    <h3 class="text-xl font-bold flex items-center gap-2">
+                        <span class="text-white">></span> WORK_EXPERIENCE
+                    </h3>
+                    <div class="space-y-8 border-l border-green-900 pl-6 relative">
+                        <div class="relative">
+                            <div class="absolute -left-[29px] top-0 w-2 h-2 bg-green-500 shadow-[0_0_10px_#00ff41]"></div>
+                            <h4 class="text-white font-bold">FOUNDER — WORK19 | AI AUTOMATION SYSTEMS</h4>
+                            <p class="text-xs opacity-70">2025 — Present</p>
+                            <p class="text-xs mt-2 italic leading-relaxed">Building AI-powered automation systems for small businesses and clinics. Worked directly with healthcare professionals to understand operational bottlenecks and translate them into simple automation systems.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="work19-connect" class="space-y-4">
+                    <h2 class="text-4xl font-extrabold text-white tracking-tighter">WORK19</h2>
+                    <p class="text-green-500 font-bold">Connect with us on LinkedIn and Instagram.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <a href="https://www.instagram.com/work19official?igsh=MW5xbWN2eHdhcXhiOQ==" target="_blank" class="content-card p-4 rounded flex items-center justify-between hover:bg-green-900/20 transition-all border-green-500">
+                            <div class="flex items-center gap-3">
+                                <i class="fab fa-instagram text-xl"></i>
+                                <span class="text-xs font-bold uppercase tracking-widest">Instagram</span>
+                            </div>
+                            <i class="fas fa-external-link-alt text-[10px] opacity-50"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/company/work19official/" target="_blank" class="content-card p-4 rounded flex items-center justify-between hover:bg-green-900/20 transition-all border-green-500">
+                            <div class="flex items-center gap-3">
+                                <i class="fab fa-linkedin text-xl"></i>
+                                <span class="text-xs font-bold uppercase tracking-widest">LinkedIn</span>
+                            </div>
+                            <i class="fas fa-external-link-alt text-[10px] opacity-50"></i>
+                        </a>
+                    </div>
+                    <p class="text-[10px] opacity-70 mt-4 italic tracking-tight">Follow us for updates, insights, and announcements.</p>
+                </section>
+
+                <section id="projects" class="space-y-8">
+                    <h3 class="text-xl font-bold flex items-center gap-2">
+                        <span class="text-white">></span> PROJECTS
+                    </h3>
+                    <div class="content-card p-6 rounded relative border-green-900">
+                        <h4 class="text-white font-bold text-lg mb-2">AI Clinic Receptionist System</h4>
+                        <p class="text-xs leading-relaxed mb-4">Developed an AI-based receptionist workflow to automate patient interactions through WhatsApp and voice AI. The system captures patient details, stores structured data, sends booking confirmations, and automatically generates calendar entries for clinic scheduling.</p>
+                        
+                        <div class="mb-4">
+                            <p class="text-[10px] opacity-50 uppercase font-bold mb-2 tracking-widest">Tech Stack</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-green-900/40 px-2 py-1 text-[10px] border border-green-900">WhatsApp API</span>
+                                <span class="bg-green-900/40 px-2 py-1 text-[10px] border border-green-900">Retell AI</span>
+                                <span class="bg-green-900/40 px-2 py-1 text-[10px] border border-green-900">Make</span>
+                                <span class="bg-green-900/40 px-2 py-1 text-[10px] border border-green-900">Google Workspace</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="text-[10px] opacity-50 uppercase font-bold mb-1 tracking-widest">Role/Impact</p>
+                            <p class="text-xs italic">Reduced manual coordination for clinics and demonstrated real-world AI automation use cases for small medical facilities.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="contact" class="pb-20">
+                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+                        <span class="text-white">></span> SEND_SIGNAL
+                    </h3>
+                    <div class="content-card p-6 rounded">
+                        <div class="mb-4 text-xs opacity-50"># Establishing uplink to aahilsheikhofficial@gmail.com...</div>
+                        <form id="terminal-form" class="space-y-4">
+                            <div class="flex flex-col md:flex-row gap-4">
+                                <div class="flex-1">
+                                    <label class="text-[10px] block mb-1">IDENTIFIER:</label>
+                                    <input type="text" id="contact-name" class="w-full bg-black border border-green-900 p-2 text-xs focus:border-green-400 outline-none" placeholder="e.g. Clinic Owner">
+                                </div>
+                                <div class="flex-1">
+                                    <label class="text-[10px] block mb-1">RETURN_PATH (OPTIONAL):</label>
+                                    <input type="email" id="contact-email" class="w-full bg-black border border-green-900 p-2 text-xs focus:border-green-400 outline-none" placeholder="email@example.com">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-[10px] block mb-1 flex justify-between">
+                                    ENCRYPTED_PAYLOAD:
+                                    <button type="button" onclick="generateMessage()" class="text-blue-400 hover:text-white transition-colors">✨ Draft with AI</button>
+                                </label>
+                                <textarea id="contact-message" rows="3" class="w-full bg-black border border-green-900 p-2 text-xs focus:border-green-400 outline-none" placeholder="Describe your operational bottleneck..."></textarea>
+                            </div>
+                            <button type="submit" class="btn-terminal px-6 py-2 text-xs uppercase font-bold tracking-widest">
+                                Execute Transmission
+                            </button>
+                        </form>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const apiKey = ""; 
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'aahil-work19';
+        const officialEmail = "aahilsheikhofficial@gmail.com";
+
+        async function callGemini(prompt, systemInstruction = "") {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemInstruction }] }
+            };
+
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const data = await response.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "Error processing signal.";
+                } catch (err) {
+                    await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
+                }
+            }
+            return "Connection timeout.";
+        }
+
+        async function generateMessage() {
+            const messageArea = document.getElementById('contact-message');
+            const name = document.getElementById('contact-name').value || "A business owner";
+            messageArea.value = "Generating automation request...";
+            messageArea.classList.add('ai-loading');
+
+            const prompt = `Write a professional short message from ${name} to Sheikh Mohammed Aahil. Mention needing AI automation for a small business or clinic. Keep it under 40 words.`;
+            const result = await callGemini(prompt, "You are a professional assistant for Work19.");
+            
+            messageArea.value = result;
+            messageArea.classList.remove('ai-loading');
+        }
+
+        const bootMessages = [
+            "INITIALIZING AAHIL_OS v2.5.5...",
+            "LINKING EXTERNAL_NODES...",
+            `UPDATING MAIL_TARGET: ${officialEmail}`,
+            "CONFIGURING WORK19_OFFICIAL_SOCIALS...",
+            "SUCCESS: PORTFOLIO_V2.5.5_ONLINE."
+        ];
+
+        window.onload = async () => {
+            const log = document.getElementById('boot-log');
+            const screen = document.getElementById('boot-screen');
+            for(let msg of bootMessages) {
+                const p = document.createElement('p');
+                p.textContent = `[ OK ] ${msg}`;
+                log.appendChild(p);
+                await new Promise(r => setTimeout(r, 60));
+            }
+            setTimeout(() => {
+                screen.style.transition = "opacity 0.5s";
+                screen.style.opacity = "0";
+                setTimeout(() => screen.remove(), 500);
+            }, 300);
+        };
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if(el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('terminal-form').onsubmit = (e) => {
+            e.preventDefault();
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+            const subject = encodeURIComponent(`Project Signal from ${name}`);
+            const body = encodeURIComponent(`Identifier: ${name}\nReturn Path: ${email}\n\nPayload:\n${message}`);
+            window.location.href = `mailto:${officialEmail}?subject=${subject}&body=${body}`;
+            const btn = e.target.querySelector('button');
+            btn.textContent = "TRANSMISSION_OPENED";
+            setTimeout(() => { btn.textContent = "Execute Transmission"; e.target.reset(); }, 3000);
+        };
+    </script>
+</body>
+</html>
